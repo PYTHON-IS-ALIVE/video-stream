@@ -81,8 +81,7 @@ async def play(c: Client, m: Message):
             await m.reply_text(
                 f"@{ASSISTANT_NAME} **is banned in group** {m.chat.title}\n\n» **unban the userbot first if you want to use this bot.**"
             )
-            return
-    except UserNotParticipant:
+            return    
         if m.chat.username:
             try:
                 await user.join_chat(m.chat.username)
@@ -274,7 +273,6 @@ async def stream(c: Client, m: Message):
             f"💡 To use me, I need to be an **Administrator** with the following **permissions**:\n\n» ❌ __Delete messages__\n» ❌ __Add users__\n» ❌ __Manage video chat__\n\nData is **updated** automatically after you **promote me**"
         )
         return   
-    except UserNotParticipant:
         if m.chat.username:
             try:
                 await user.join_chat(m.chat.username)
