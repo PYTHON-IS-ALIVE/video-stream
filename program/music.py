@@ -73,7 +73,8 @@ async def play(c: Client, m: Message):
         await m.reply_text(
             f"💡 To use me, I need to be an **Administrator** with the following **permissions**:\n\n» ❌ __Delete messages__\n» ❌ __Add users__\n» ❌ __Manage video chat__\n\nData is **updated** automatically after you **promote me**"
         )
-        return    
+        return
+    except UserNotParticipant:    
     try:
         ubot = await user.get_me()
         b = await c.get_chat_member(chat_id, ubot.id)
