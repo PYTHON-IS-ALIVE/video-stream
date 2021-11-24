@@ -50,7 +50,7 @@ async def ytdl(link):
         return 0, stderr.decode()
 
 
-@Client.on_message(command(["play", f"play@{BOT_USERNAME}"]) & other_filters)
+@Client.on_message(command(["mplay", f"mplay@{BOT_USERNAME}"]) & other_filters)
 async def play(c: Client, m: Message):
     replied = m.reply_to_message
     chat_id = m.chat.id
@@ -74,7 +74,19 @@ async def play(c: Client, m: Message):
             f"💡 To use me, I need to be an **Administrator** with the following **permissions**:\n\n» ❌ __Delete messages__\n» ❌ __Add users__\n» ❌ __Manage video chat__\n\nData is **updated** automatically after you **promote me**"
         )
         return
-    except UserNotParticipant:    
+    if not a.can_manage_voice_chats:
+        await m.reply_text(
+            "missing required permission:" + "\n\n» ❌ __Manage video chat__"
+        )
+        return
+    if not a.can_delete_messages:
+        await m.reply_text(
+            "missing required permission:" + "\n\n» ❌ __Delete messages__"
+        )
+        return
+    if not a.can_invite_users:
+        await m.reply_text("missing required permission:" + "\n\n» ❌ __Add users__")
+        return
     try:
         ubot = await user.get_me()
         b = await c.get_chat_member(chat_id, ubot.id)
@@ -82,7 +94,8 @@ async def play(c: Client, m: Message):
             await m.reply_text(
                 f"@{ASSISTANT_NAME} **is banned in group** {m.chat.title}\n\n» **unban the userbot first if you want to use this bot.**"
             )
-            return    
+            return
+    except UserNotParticipant:
         if m.chat.username:
             try:
                 await user.join_chat(m.chat.username)
@@ -257,7 +270,7 @@ async def stream(c: Client, m: Message):
     keyboard = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("Update", url=f"https://t.me/ANACONDA_BOTZ"),
+                InlineKeyboardButton("Updates", url=f"https://t.me/ANACONDA_BOTZ"),
                 InlineKeyboardButton("Support", url=f"https://t.me/ANACONDA_ARMY"),
             ]
         ]
@@ -273,7 +286,29 @@ async def stream(c: Client, m: Message):
         await m.reply_text(
             f"💡 To use me, I need to be an **Administrator** with the following **permissions**:\n\n» ❌ __Delete messages__\n» ❌ __Add users__\n» ❌ __Manage video chat__\n\nData is **updated** automatically after you **promote me**"
         )
-        return   
+        return
+    if not a.can_manage_voice_chats:
+        await m.reply_text(
+            "missing required permission:" + "\n\n» ❌ __Manage video chat__"
+        )
+        return
+    if not a.can_delete_messages:
+        await m.reply_text(
+            "missing required permission:" + "\n\n» ❌ __Delete messages__"
+        )
+        return
+    if not a.can_invite_users:
+        await m.reply_text("missing required permission:" + "\n\n» ❌ __Add users__")
+        return
+    try:
+        ubot = await user.get_me()
+        b = await c.get_chat_member(chat_id, ubot.id)
+        if b.status == "kicked":
+            await m.reply_text(
+                f"@{ASSISTANT_NAME} **is banned in group** {m.chat.title}\n\n» **unban the userbot first if you want to use this bot.**"
+            )
+            return
+    except UserNotParticipant:
         if m.chat.username:
             try:
                 await user.join_chat(m.chat.username)
